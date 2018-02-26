@@ -10,12 +10,14 @@ Inspired by Serverless aws-csharp 1.0 template
 Inspired by [PageUpPeopleOrg](https://github.com/PageUpPeopleOrg/serverless-microservice-bootstrap) Bootstrap Template
 HealthCheck Endpoint / Build Scripts / ReadMe
 
-Need help with the cloud? Check us out over at [Observian](https://www.observian.com).
-
 BuiltWith: [DotNetServerlessBootstrap](https://github.com/jdonohoo/serverless-aws-aspnetcore2) -- written by me.
 
+Need help with the cloud? Check us out over at [Observian](https://www.observian.com).
+
+
+
 ## Intro
-Sick of hitting refresh on CoinMarketCap.com? Yea, me too.
+Sick of hitting refresh on CoinMarketCap.com? Yeah, me too.
 Follow this to have something like this: Posting to a slack channel of your choosing every hour.
 ```
 === Crypto-PriceWatch ===

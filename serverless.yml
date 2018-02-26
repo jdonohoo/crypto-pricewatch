@@ -53,7 +53,7 @@ package:
 #    - exclude-me-dir/**
 
 functions:
-  hello:
+  checkprices:
     handler: Handlers::Handlers.Handler::PriceCheck
     events:
     - schedule:

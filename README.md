@@ -12,6 +12,20 @@ HealthCheck Endpoint / Build Scripts / ReadMe
 
 Need help with the cloud? Check us out over at [Observian](https://www.observian.com).
 
+## Intro
+Sick of hitting refresh on CoinMarketCap.com? Yea, me too.
+Follow this to have something like this: Posting to a slack channel of your choosing every hour.
+```
+=== Crypto-PriceWatch ===
+BTC : 10207.15
+ETH : 859.7
+LTC : 218.57
+XRP : 0.9181
+VTC : 4
+XVG : 0.06059
+CRC : 2.48
+=========================
+```
 
 ## Getting Started
 
@@ -190,7 +204,7 @@ Paste the full ARN into the serverless.yml, I have it called out under provider:
 ### Accessing SSM Parameters via Code
 ```
 AppConfig.Instance.Parameters["CoinPriceUrl"];
-AppConfig.Instance.Parameters["CoinsToWatch"]; 
+AppConfig.Instance.Parameters["CoinsToWatch"]; //Comma separated list of crypto Symbols to pull prices for.
 AppConfig.Instance.Parameters["SlackChannel"]; 
 AppConfig.Instance.Parameters["SlackUser"]; 
 AppConfig.Instance.Parameters["SlackWebHook"]; 

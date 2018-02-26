@@ -1,4 +1,4 @@
-# serverless-aws-aspnetcore2
+# crypto-pricewatch
 
 [![serverless](https://dl.dropboxusercontent.com/s/d6opqwym91k0roz/serverless_badge_v3.svg)](http://www.serverless.com)
 
@@ -59,7 +59,7 @@ dotnet test .\Tests
 Build started, please wait...
 Build completed.
 
-Test run for C:\projects\serverless-aws-aspnetcore2\Tests\bin\Debug\netcoreapp2.0\Tests.dll(.NETCoreApp,Version=v2.0)
+Test run for C:\projects\crypto-pricewatch\Tests\bin\Debug\netcoreapp2.0\Tests.dll(.NETCoreApp,Version=v2.0)
 Microsoft (R) Test Execution Command Line Tool Version 15.5.0
 Copyright (c) Microsoft Corporation.  All rights reserved.
 
@@ -90,17 +90,17 @@ Serverless: Checking Stack create progress...
 .........................................
 Serverless: Stack create finished...
 Service Information
-service: serverless-aws-aspnetcore2
+service: crypto-pricewatch
 stage: dev
 region: us-east-1
-stack: serverless-aws-aspnetcore2-dev
+stack: crypto-pricewatch-dev
 api keys:
   None
 endpoints:
   GET - https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/dev/healthcheck
 functions:
-  hello: serverless-aws-aspnetcore2-dev-hello
-  healthcheck: serverless-aws-aspnetcore2-dev-healthcheck
+  hello: crypto-pricewatch-dev-hello
+  healthcheck: crypto-pricewatch-dev-healthcheck
 ```
 
 ### Testing via HealthCheck Endpoint
@@ -189,15 +189,18 @@ Paste the full ARN into the serverless.yml, I have it called out under provider:
 ```
 ### Accessing SSM Parameters via Code
 ```
-AppConfig.Instance.Parameters["TestString"];
-AppConfig.Instance.Parameters["TestSecure"]; 
+AppConfig.Instance.Parameters["CoinPriceUrl"];
+AppConfig.Instance.Parameters["CoinsToWatch"]; 
+AppConfig.Instance.Parameters["SlackChannel"]; 
+AppConfig.Instance.Parameters["SlackUser"]; 
+AppConfig.Instance.Parameters["SlackWebHook"]; 
 ```
-Secure strings will automatically be pulled down decrypted.
+Secure strings will automatically be decrypted. In the AppConfig helper.
 
 
 ### Retrieving parameters via aws-cli
 ```
-aws ssm get-parameters-by-path --path /dev/serverless-aws-aspnetcore2/settings --recursive
+aws ssm get-parameters-by-path --path /dev/crypto-pricewatch/settings --recursive
 ```
 #### Sample Output:
 ```
@@ -205,15 +208,33 @@ aws ssm get-parameters-by-path --path /dev/serverless-aws-aspnetcore2/settings -
     "Parameters": [
         {
             "Version": 1,
-            "Type": "SecureString",
-            "Name": "/dev/serverless-aws-aspnetcore2/settings/TestSecure",
-            "Value": "AQICAHj7GTUMLLb+voz+gUUoBAz/KGeLrbKNq+UgF9HcIvhrEAF4vJD/XTYbCpOmfJuONQn9AAAAdjB0BgkqhkiG9w0BBwagZzBlAgEAMGAGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMzEPiqs2fSMS8JSKmAgEQgDNPeZzlA/ljsgxcmFni0rPIG876l7hgHlU3xJrIwwUAHKGIXs68dArewJrPGYlV3jMWV1s="
+            "Type": "String",
+            "Name": "/dev/crypto-pricewatch/settings/CoinPriceUrl",
+            "Value": "https://min-api.cryptocompare.com/data/"
+        },
+        {
+            "Version": 2,
+            "Type": "StringList",
+            "Name": "/dev/crypto-pricewatch/settings/CoinsToWatch",
+            "Value": "BTC,ETH,LTC,XRP,VTC,XVG,CRC"
         },
         {
             "Version": 1,
             "Type": "String",
-            "Name": "/dev/serverless-aws-aspnetcore2/settings/TestString",
-            "Value": "Some Test String"
+            "Name": "/dev/crypto-pricewatch/settings/SlackChannel",
+            "Value": "general"
+        },
+        {
+            "Version": 1,
+            "Type": "String",
+            "Name": "/dev/crypto-pricewatch/settings/SlackUser",
+            "Value": "LambdaBot"
+        },
+        {
+            "Version": 1,
+            "Type": "SecureString",
+            "Name": "/dev/crypto-pricewatch/settings/SlackWebHook",
+            "Value": "AQICAHj7GTUMLLb+voz+gUUoBAz/KGeLrbKNq+UgF9HcIvhrEAHs/5wNWqNBskFhaaW4pKPmAAAArzCBrAYJKoZIhvcNAQcGoIGeMIGbAgEAMIGVBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDDCGg+WhxzkwVRZ44AIBEIBoGic6cpL3+fFcJtJ8vSH2nIf3s/poX59hmvUnokQIRmseij+9D0YnxOH0VFufHWKKfHfyA2VoAPQMsl3BFACtSYisljdSRS0dC2Y+4e4aiXurzlQajyWVX/madn5pDxi2YtcN1yCQ/Kw="
         }
     ]
 }
@@ -221,7 +242,7 @@ aws ssm get-parameters-by-path --path /dev/serverless-aws-aspnetcore2/settings -
 
 ### Retrieve secured values via aws-cli
 ```
-aws ssm get-parameter --name /dev/serverless-aws-aspnetcore2/settings/TestSecure --with-decryption
+aws ssm get-parameter --name /dev/crypto-pricewatch/settings/TestSecure --with-decryption
 ```
 #### Sample Output:
 ```
@@ -229,7 +250,7 @@ aws ssm get-parameter --name /dev/serverless-aws-aspnetcore2/settings/TestSecure
     "Parameter": {
         "Version": 1,
         "Type": "SecureString",
-        "Name": "/dev/serverless-aws-aspnetcore2/settings/TestSecure",
+        "Name": "/dev/crypto-pricewatch/settings/TestSecure",
         "Value": "Secure string test value"
     }
 }

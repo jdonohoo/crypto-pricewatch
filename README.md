@@ -2,7 +2,7 @@
 
 [![serverless](https://dl.dropboxusercontent.com/s/d6opqwym91k0roz/serverless_badge_v3.svg)](http://www.serverless.com)
 
-Serverless bootstrap for aws lambda running dotnetcore2
+Crypto pricewatch slackbot, running on AWS Lambda using the Serverless framework.
 
 ## Credits
 Inspired by Serverless aws-csharp 1.0 template

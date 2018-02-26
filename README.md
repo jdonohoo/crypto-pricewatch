@@ -12,6 +12,8 @@ HealthCheck Endpoint / Build Scripts / ReadMe
 
 BuiltWith: [DotNetServerlessBootstrap](https://github.com/jdonohoo/serverless-aws-aspnetcore2) -- written by me.
 
+Pricing powered by: [CryptoCompare](https://www.cryptocompare.com/)
+
 Need help with the cloud? Check us out over at [Observian](https://www.observian.com).
 
 
@@ -207,11 +209,11 @@ Paste the full ARN into the serverless.yml, I have it called out under provider:
 ```
 ### Accessing SSM Parameters via Code
 ```
-AppConfig.Instance.Parameters["CoinPriceUrl"];
+AppConfig.Instance.Parameters["CoinPriceUrl"]; //https://min-api.cryptocompare.com/data/
 AppConfig.Instance.Parameters["CoinsToWatch"]; //Comma separated list of crypto Symbols to pull prices for.
-AppConfig.Instance.Parameters["SlackChannel"]; 
-AppConfig.Instance.Parameters["SlackUser"]; 
-AppConfig.Instance.Parameters["SlackWebHook"]; 
+AppConfig.Instance.Parameters["SlackChannel"]; //don't include the # just the name.
+AppConfig.Instance.Parameters["SlackUser"]; //Can be anything, I use `LambdaBot`
+AppConfig.Instance.Parameters["SlackWebHook"]; //Webhook URL for your slack workspace, I make this a secure string.
 ```
 Secure strings will automatically be decrypted. In the AppConfig helper.
 

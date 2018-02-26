@@ -18,7 +18,7 @@ Need help with the cloud? Check us out over at [Observian](https://www.observian
 
 ## Intro
 Sick of hitting refresh on CoinMarketCap.com? Yeah, me too.
-Follow this to have something like this: Posting to a slack channel of your choosing every hour.
+This code will post something like this : `prices` to your slack channel every hour.
 ```
 === Crypto-PriceWatch ===
 BTC : 10207.15

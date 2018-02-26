@@ -12,13 +12,10 @@ namespace Handlers.Helpers
 {
     public class AppConfig
     {
+        public string ServiceName => Environment.GetEnvironmentVariable("serviceName") ?? "crypto-pricewatch";
         public string Region => Environment.GetEnvironmentVariable("region") ?? "us-east-1";
         public string Profile => Environment.GetEnvironmentVariable("profile") ?? "default";
-        public string ServiceName => Environment.GetEnvironmentVariable("serviceName") ?? "serverless-aws-aspnetcore2";
-        public string ParameterPath => Environment.GetEnvironmentVariable("parameterPath") ?? "/dev/serverless-aws-aspnetcore2/settings/";
-
-        public string TestString { get; set; }
-        public string TestSecure { get; set; }
+        public string ParameterPath => Environment.GetEnvironmentVariable("parameterPath") ?? $"/dev/{ServiceName}/settings/";
         public Dictionary<string,string> Parameters { get; set; }
 
         [JsonIgnore]
@@ -64,9 +61,11 @@ namespace Handlers.Helpers
 
                 if(p.Type == ParameterType.SecureString)
                 {
-                    var paramRequest = new GetParameterRequest();
-                    paramRequest.Name = p.Name;
-                    paramRequest.WithDecryption = true;
+                    var paramRequest = new GetParameterRequest
+                    {
+                        Name = p.Name,
+                        WithDecryption = true
+                    };
                     var t = client.GetParameterAsync(paramRequest);
                     t.Wait();
                     value = t.Result.Parameter.Value;

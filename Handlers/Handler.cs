@@ -11,13 +11,34 @@ namespace Handlers
 {
     public class Handler
     {
-        public Response Hello(Request request, ILambdaContext context)
+        public Response PriceCheck(Request request, ILambdaContext context)
         {
+            var message = new StringBuilder();
             context.Logger.LogLine($"{context.FunctionName} execution started");
-            context.Logger.LogLine($"TestString: {AppConfig.Instance.Parameters["TestString"]}");
-            context.Logger.LogLine($"TestSecure: {AppConfig.Instance.Parameters["TestSecure"]}");
+            context.Logger.LogLine(context.LogGroupName);
+            context.Logger.LogLine(context.LogStreamName);
 
-            return new Response { Message = "Hello World, serverless-aws-aspnetcore2!" };
+            var coins = AppConfig.Instance.Parameters["CoinsToWatch"].Split(',');
+            var priceList = new Dictionary<string, double>();
+
+            foreach(var c in coins)
+            {
+                priceList.Add(c, CryptoCompare.GetCurrentCryptoPrice(c));
+            }
+
+            message.AppendLine("```");
+            message.AppendLine("=== Crypto-PriceWatch ===");
+            foreach (var p in priceList)
+            {
+                message.AppendLine($"{p.Key} : {p.Value}");
+            }
+            message.AppendLine("=========================");
+            message.AppendLine("```");
+
+            SlackHookHelper.SendSlackNotification(message.ToString());
+
+
+            return new Response { Message = message.ToString() };
         }
 
         public APIGatewayProxyResponse HealthCheck(APIGatewayProxyRequest request, ILambdaContext context)

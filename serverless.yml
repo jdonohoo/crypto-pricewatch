@@ -15,7 +15,7 @@
 #Inspired by PageUpPeopleOrg https://github.com/PageUpPeopleOrg/serverless-microservice-bootstrap
 #HealthCheck Endpoint / Build Scripts / ReadMe
 
-service: serverless-aws-aspnetcore2 # NOTE: update this with your service name
+service: crypto-pricewatch # NOTE: update this with your service name
 
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
@@ -35,9 +35,7 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
   #Make sure this s3 exists 
-  deploymentBucket: ${self:service}-${self:provider.region}-deploys
-
-
+  deploymentBucket: observian-serverless-${self:provider.region}-deploys
 
 # you can define service wide environment variables here
   environment:
@@ -56,7 +54,12 @@ package:
 
 functions:
   hello:
-    handler: Handlers::Handlers.Handler::Hello
+    handler: Handlers::Handlers.Handler::PriceCheck
+    events:
+    - schedule:
+        name: invoke-crypto-pricewatch
+        description: invokes crypto-pricewatch lambda every hour.
+        rate: rate(1 hour)
   
   healthcheck:
     handler: Handlers::Handlers.Handler::HealthCheck

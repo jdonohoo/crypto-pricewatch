@@ -2,7 +2,7 @@
 
 [![serverless](https://dl.dropboxusercontent.com/s/d6opqwym91k0roz/serverless_badge_v3.svg)](http://www.serverless.com)
 
-Serverless bootstrap for aws lambda running dotnetcore2
+Crypto pricewatch slackbot, running on AWS Lambda using the Serverless framework.
 
 ## Credits
 Inspired by Serverless aws-csharp 1.0 template
@@ -10,8 +10,28 @@ Inspired by Serverless aws-csharp 1.0 template
 Inspired by [PageUpPeopleOrg](https://github.com/PageUpPeopleOrg/serverless-microservice-bootstrap) Bootstrap Template
 HealthCheck Endpoint / Build Scripts / ReadMe
 
+BuiltWith: [DotNetServerlessBootstrap](https://github.com/jdonohoo/serverless-aws-aspnetcore2) -- written by me.
+
+Pricing powered by: [CryptoCompare](https://www.cryptocompare.com/)
+
 Need help with the cloud? Check us out over at [Observian](https://www.observian.com).
 
+
+
+## Intro
+Sick of hitting refresh on CoinMarketCap.com? Yeah, me too.
+This code will post something like this : `prices` to your slack channel every hour.
+```
+=== Crypto-PriceWatch ===
+BTC : 10207.15
+ETH : 859.7
+LTC : 218.57
+XRP : 0.9181
+VTC : 4
+XVG : 0.06059
+CRC : 2.48
+=========================
+```
 
 ## Getting Started
 
@@ -162,7 +182,7 @@ I make a service role for Lambda called `micro-service` with the following polic
     ]
 }
 ```
-As well as (CloudWatchLogsFullAcces)
+As well as (CloudWatchLogsFullAccess)
 
 ```
 {
@@ -189,11 +209,11 @@ Paste the full ARN into the serverless.yml, I have it called out under provider:
 ```
 ### Accessing SSM Parameters via Code
 ```
-AppConfig.Instance.Parameters["CoinPriceUrl"];
-AppConfig.Instance.Parameters["CoinsToWatch"]; 
-AppConfig.Instance.Parameters["SlackChannel"]; 
-AppConfig.Instance.Parameters["SlackUser"]; 
-AppConfig.Instance.Parameters["SlackWebHook"]; 
+AppConfig.Instance.Parameters["CoinPriceUrl"]; //https://min-api.cryptocompare.com/data/
+AppConfig.Instance.Parameters["CoinsToWatch"]; //Comma separated list of crypto Symbols to pull prices for.
+AppConfig.Instance.Parameters["SlackChannel"]; //don't include the # just the name.
+AppConfig.Instance.Parameters["SlackUser"]; //Can be anything, I use `LambdaBot`
+AppConfig.Instance.Parameters["SlackWebHook"]; //Webhook URL for your slack workspace, I make this a secure string.
 ```
 Secure strings will automatically be decrypted. In the AppConfig helper.
 

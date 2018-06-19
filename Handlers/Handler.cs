@@ -18,7 +18,7 @@ namespace Handlers
             context.Logger.LogLine(context.LogGroupName);
             context.Logger.LogLine(context.LogStreamName);
 
-            var coins = AppConfig.Instance.Parameters["CoinsToWatch"].Split(',');
+            var coins = AppConfig.Instance.GetParameter("CoinsToWatch").Split(',');
             var priceList = new Dictionary<string, double>();
 
             foreach(var c in coins)

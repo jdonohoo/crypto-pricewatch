@@ -12,11 +12,12 @@ namespace Handlers.Helpers
 {
     public class AppConfig
     {
-        public string ServiceName => Environment.GetEnvironmentVariable("serviceName") ?? "crypto-pricewatch";
         public string Region => Environment.GetEnvironmentVariable("region") ?? "us-east-1";
         public string Profile => Environment.GetEnvironmentVariable("profile") ?? "default";
-        public string ParameterPath => Environment.GetEnvironmentVariable("parameterPath") ?? $"/dev/{ServiceName}/settings/";
-        public Dictionary<string,string> Parameters { get; set; }
+        public string ServiceName => Environment.GetEnvironmentVariable("serviceName") ?? "crypto-pricewatch";
+        public string ParameterPath => Environment.GetEnvironmentVariable("parameterPath") ?? "/dev/crypto-pricewatch/settings/";
+
+        private Dictionary<string, string> Parameters { get; set; }
 
         [JsonIgnore]
         private static volatile AppConfig _instance;
@@ -25,6 +26,7 @@ namespace Handlers.Helpers
         [JsonIgnore]
         public static AppConfig Instance
         {
+
             get
             {
                 if (_instance != null) return _instance;
@@ -41,40 +43,58 @@ namespace Handlers.Helpers
 
         private AppConfig()
         {
+            List<Parameter> paramList = new List<Parameter>();
+            string nextToken = string.Empty;
+
             Parameters = new Dictionary<string, string>();
             var client = new AmazonSimpleSystemsManagementClient(RegionEndpoint.GetBySystemName(Region));
 
             var request = new GetParametersByPathRequest
             {
                 Path = ParameterPath,
-                Recursive = true
+                Recursive = true,
+                WithDecryption = true
             };
 
             var task = client.GetParametersByPathAsync(request);
             task.Wait();
 
-            var paramList  = task.Result.Parameters;
-            foreach(var p in paramList)
+            paramList.AddRange(task.Result.Parameters);
+            nextToken = task.Result.NextToken;
+
+            while (!string.IsNullOrEmpty(nextToken))
+            {
+                request.NextToken = nextToken;
+                task = client.GetParametersByPathAsync(request);
+                task.Wait();
+
+                paramList.AddRange(task.Result.Parameters);
+                nextToken = task.Result.NextToken;
+            }
+
+
+            foreach (var p in paramList)
             {
                 string name = p.Name.Replace(ParameterPath, string.Empty);
                 string value = p.Value;
-
-                if(p.Type == ParameterType.SecureString)
-                {
-                    var paramRequest = new GetParameterRequest
-                    {
-                        Name = p.Name,
-                        WithDecryption = true
-                    };
-                    var t = client.GetParameterAsync(paramRequest);
-                    t.Wait();
-                    value = t.Result.Parameter.Value;
-                }
                 Parameters.Add(name, value);
             }
-            
-            
+
+
         }
-         
+
+        public string GetParameter(string name)
+        {
+            try
+            {
+                return Parameters[name];
+            }
+            catch (Exception)
+            {
+                throw new Exception($"{name} not found in parameter dictionary check: {Instance.ParameterPath}{name} is in SSM Parameter Store.");
+            }
+
+        }
+
     }
 }

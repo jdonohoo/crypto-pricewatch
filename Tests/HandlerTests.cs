@@ -48,8 +48,8 @@ namespace Tests
              
             Assert.Equal(ServiceName, AppConfig.Instance.ServiceName);
             Assert.Equal($"/{stage}/{ServiceName}/settings/", AppConfig.Instance.ParameterPath);
-            Assert.Equal("https://min-api.cryptocompare.com/data/", AppConfig.Instance.Parameters["CoinPriceUrl"]);
-            Assert.NotEmpty(AppConfig.Instance.Parameters["CoinsToWatch"]);
+            Assert.Equal("https://min-api.cryptocompare.com/data/", AppConfig.Instance.GetParameter("CoinPriceUrl"));
+            Assert.NotEmpty(AppConfig.Instance.GetParameter("CoinsToWatch"));
         }
     }
 }

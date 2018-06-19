@@ -10,7 +10,7 @@ namespace Handlers.Helpers
     {
         public static double GetCurrentCryptoPrice(string symbol)
         {
-            var api = AppConfig.Instance.Parameters["CoinPriceUrl"];
+            var api = AppConfig.Instance.GetParameter("CoinPriceUrl");
             var request = $"price?fsym={symbol.ToUpper()}&tsyms=USD";
             var client = new WebClient();
             

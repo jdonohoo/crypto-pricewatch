@@ -8,9 +8,9 @@ namespace Handlers.Helpers
 {
     public static class SlackHookHelper
     {
-        private static string SlackChannel => AppConfig.Instance.Parameters["SlackChannel"];
-        private static string SlackUser => AppConfig.Instance.Parameters["SlackUser"];
-        private static string SlackWebHook => AppConfig.Instance.Parameters["SlackWebHook"];
+        private static string SlackChannel => AppConfig.Instance.GetParameter("SlackChannel");
+        private static string SlackUser => AppConfig.Instance.GetParameter("SlackUser");
+        private static string SlackWebHook => AppConfig.Instance.GetParameter("SlackWebHook");
         static SlackHookHelper()
         {
             Client = new WebHookClient(SlackWebHook);
